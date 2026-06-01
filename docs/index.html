@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>365 HR Copilot — Agentic AI for Enterprise HR · Governed on Azure &amp; Microsoft 365</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👔</text></svg>" />
+<meta name="description" content="An enterprise-grade HR AI agent built in Microsoft Copilot Studio: it answers policy questions strictly from approved documents and runs leave requests under human-approval controls — fully governed and compliant inside the Azure &amp; Microsoft 365 environment, delivered in Teams." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#070b14;
+    --bg-2:#0a1120;
+    --surface:rgba(255,255,255,.035);
+    --surface-2:rgba(255,255,255,.06);
+    --glass:rgba(16,24,40,.55);
+    --line:rgba(148,163,184,.14);
+    --line-2:rgba(148,163,184,.22);
+    --em:#34d399;
+    --em-2:#10b981;
+    --em-3:#059669;
+    --teal:#2dd4bf;
+    --ink:#f1f5f9;
+    --ink-2:#cbd5e1;
+    --muted:#94a3b8;
+    --muted-2:#64748b;
+    --grad:linear-gradient(135deg,#6ee7b7 0%,#34d399 40%,#10b981 70%,#0d9488 100%);
+    --grad-text:linear-gradient(120deg,#a7f3d0,#34d399 50%,#2dd4bf);
+    --r:18px; --r-sm:13px;
+    --sh:0 1px 2px rgba(0,0,0,.4);
+    --sh-md:0 20px 50px rgba(0,0,0,.45);
+    --sh-glow:0 0 0 1px rgba(52,211,153,.18),0 24px 60px rgba(5,150,105,.18);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter","Segoe UI",-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  /* ambient glows */
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(800px 500px at 78% -8%,rgba(16,185,129,.18),transparent 60%),
+      radial-gradient(700px 520px at 8% 12%,rgba(45,212,191,.12),transparent 60%),
+      radial-gradient(900px 700px at 50% 120%,rgba(13,148,136,.14),transparent 60%)}
+  a{color:var(--em);text-decoration:none}
+  a:hover{color:var(--teal)}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
+  .section{padding:104px 0}
+  h1,h2,h3,.brand,.eyebrow,.stat .n,.btn{font-family:"Space Grotesk","Inter",sans-serif}
+  h2{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.03em;margin:0 0 16px;line-height:1.08}
+  h3{font-size:1.12rem;font-weight:600;margin:0 0 8px;letter-spacing:-.01em;color:#fff}
+  .grad-text{background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.74rem;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--em);margin-bottom:18px}
+  .eyebrow::before{content:"";width:26px;height:1.5px;background:linear-gradient(90deg,var(--em),transparent)}
+  .lead{color:var(--ink-2);font-size:1.12rem;max-width:660px;margin:0}
+  .center{text-align:center}.center .eyebrow{justify-content:center}.center .lead{margin:0 auto}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* nav */
+  .topbar{position:sticky;top:0;z-index:80;backdrop-filter:blur(16px) saturate(160%);
+    background:rgba(7,11,20,.6);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;gap:18px;height:66px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.01em;font-size:1.02rem;color:#fff}
+  .logo{width:32px;height:32px;border-radius:9px;background:var(--grad);display:grid;place-items:center;
+    color:#04140d;font-weight:700;font-size:.9rem;box-shadow:0 0 18px rgba(52,211,153,.45)}
+  .navlinks{margin-left:auto;display:flex;align-items:center;gap:28px;font-size:.92rem}
+  .navlinks a{color:var(--muted);font-weight:500}
+  .navlinks a:hover{color:#fff}
+  .nav-cta{padding:9px 17px;border-radius:10px;border:1px solid var(--line-2);color:#fff!important;font-weight:600;
+    background:var(--surface)}
+  .nav-cta:hover{border-color:var(--em);box-shadow:0 0 0 3px rgba(52,211,153,.12)}
+  @media(max-width:780px){.navlinks a:not(.nav-cta){display:none}}
+
+  /* hero */
+  .hero .wrap{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center;padding:96px 26px 80px}
+  @media(max-width:940px){.hero .wrap{grid-template-columns:1fr;gap:40px;padding-top:64px}}
+  .kicker{display:block;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:.95rem;letter-spacing:-.01em;
+    color:var(--em);margin-bottom:14px}
+  .pill{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;color:var(--ink-2);
+    padding:7px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);margin-bottom:26px}
+  .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--em);box-shadow:0 0 10px var(--em)}
+  h1{font-size:clamp(2.6rem,6vw,4.1rem);font-weight:700;letter-spacing:-.04em;line-height:1.02;margin:0 0 22px;color:#fff}
+  .hero .sub{font-size:1.16rem;color:var(--muted);max-width:540px;margin:0 0 34px}
+  .btnrow{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:40px}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 24px;border-radius:12px;font-size:.95rem;
+    font-weight:600;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s}
+  .btn.primary{background:var(--grad);color:#04140d;border:none;box-shadow:0 14px 34px rgba(16,185,129,.32)}
+  .btn.primary:hover{transform:translateY(-2px);box-shadow:0 20px 46px rgba(16,185,129,.5)}
+  .btn.ghost{background:var(--surface);color:#fff;border:1px solid var(--line-2)}
+  .btn.ghost:hover{transform:translateY(-2px);border-color:var(--em)}
+  .stats{display:flex;gap:34px;flex-wrap:wrap}
+  .stat .n{font-size:1.7rem;font-weight:700;background:var(--grad-text);-webkit-background-clip:text;background-clip:text;
+    color:transparent;line-height:1;letter-spacing:-.02em}
+  .stat .l{font-size:.8rem;color:var(--muted-2);margin-top:5px}
+
+  /* glass card generic */
+  .glass{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);backdrop-filter:blur(12px);
+    box-shadow:var(--sh-md);position:relative;overflow:hidden}
+  .glass::before{content:"";position:absolute;inset:0;border-radius:var(--r);padding:1px;pointer-events:none;
+    background:linear-gradient(140deg,rgba(52,211,153,.4),transparent 40%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;opacity:.5}
+
+  /* hero console */
+  .console{padding:0}
+  .console-bar{display:flex;align-items:center;gap:9px;padding:14px 18px;border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.02)}
+  .console-bar .av{width:32px;height:32px;border-radius:9px;background:var(--grad);display:grid;place-items:center;
+    color:#04140d;font-weight:700;font-size:.85rem}
+  .console-bar .nm{font-weight:600;font-size:.9rem;color:#fff;line-height:1.2}
+  .console-bar .st{font-size:.72rem;color:var(--em);display:flex;align-items:center;gap:5px}
+  .console-bar .st::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--em);box-shadow:0 0 8px var(--em)}
+  .console-bar .tag{margin-left:auto;font-size:.64rem;font-weight:700;letter-spacing:.08em;color:var(--teal);
+    background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.25);padding:4px 9px;border-radius:6px}
+  .console-body{padding:18px;display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:86%;padding:11px 14px;border-radius:13px;font-size:.88rem;line-height:1.5}
+  .msg.bot{align-self:flex-start;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--ink-2);border-bottom-left-radius:4px}
+  .msg.user{align-self:flex-end;background:var(--grad);color:#04140d;font-weight:500;border-bottom-right-radius:4px}
+  .chip{display:inline-flex;align-items:center;gap:6px;margin-top:9px;font-size:.72rem;font-weight:600;
+    padding:4px 9px;border-radius:7px}
+  .chip.src{color:var(--teal);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.22)}
+  .chip.esc{color:#fbbf24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.28)}
+  .chip.ok{color:var(--em);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.28)}
+
+  /* marquee strip */
+  .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.015)}
+  .strip .wrap{display:flex;align-items:center;gap:13px;flex-wrap:wrap;justify-content:center;padding:24px 26px}
+  .strip .lbl{font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);margin-right:6px}
+  .ms{display:inline-flex;align-items:center;gap:8px;font-size:.86rem;color:var(--ink-2);font-weight:500;
+    padding:7px 13px;border-radius:9px;border:1px solid var(--line);background:var(--surface)}
+  .ms .sq{width:8px;height:8px;border-radius:3px;background:var(--em);box-shadow:0 0 8px var(--em)}
+
+  /* grids */
+  .grid{display:grid;gap:18px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:880px){.g3{grid-template-columns:1fr}}
+  @media(max-width:900px){.g4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.g4{grid-template-columns:1fr}}
+
+  /* kpi + callout */
+  .kpi{text-align:center;padding:26px}
+  .kpi .big{font-family:"Space Grotesk",sans-serif;font-size:2.2rem;font-weight:700;letter-spacing:-.02em;line-height:1;
+    background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .kpi h3{margin-top:10px}
+  .callout{display:flex;gap:15px;align-items:flex-start;border-radius:var(--r);padding:22px 24px;
+    background:linear-gradient(140deg,rgba(16,185,129,.12),rgba(13,148,136,.04)),var(--glass);
+    border:1px solid rgba(52,211,153,.24);box-shadow:var(--sh-md)}
+  .callout .ic{font-size:1.4rem;flex:0 0 auto}
+  .callout p{margin:0;color:var(--ink-2);font-size:.96rem}
+  .card{padding:28px}
+  .card .ico{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;font-size:1.35rem;margin-bottom:18px;
+    background:linear-gradient(140deg,rgba(52,211,153,.16),rgba(45,212,191,.06));border:1px solid rgba(52,211,153,.22)}
+  .card p{color:var(--muted);margin:0;font-size:.94rem}
+  .card .tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+  .card .t{font-size:.7rem;font-weight:600;color:var(--em);background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.18);
+    padding:3px 9px;border-radius:6px;font-family:"Space Grotesk",monospace}
+  .lift{transition:transform .2s,border-color .2s,box-shadow .2s}
+  .lift:hover{transform:translateY(-5px);border-color:var(--line-2);box-shadow:var(--sh-glow)}
+
+  /* spotlight (HITL) */
+  .spot{display:grid;grid-template-columns:.85fr 1.15fr;gap:46px;align-items:center}
+  @media(max-width:940px){.spot{grid-template-columns:1fr;gap:34px}}
+  .router{display:inline-flex;align-items:center;gap:10px;padding:11px 18px;border-radius:12px;font-weight:600;
+    font-family:"Space Grotesk",sans-serif;font-size:.9rem;color:#04140d;background:var(--grad);
+    box-shadow:0 12px 30px rgba(16,185,129,.3);margin-bottom:20px}
+  .tiers{display:flex;flex-direction:column;gap:14px}
+  .tier{display:flex;gap:18px;align-items:flex-start;padding:20px 22px;border-radius:var(--r-sm);
+    background:var(--glass);border:1px solid var(--line);position:relative;overflow:hidden;
+    transition:transform .18s,border-color .18s}
+  .tier:hover{transform:translateX(5px);border-color:var(--line-2)}
+  .tier::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .tier.t1::before{background:linear-gradient(#34d399,#10b981)}
+  .tier.t2::before{background:linear-gradient(#2dd4bf,#0891b2)}
+  .tier.t3::before{background:linear-gradient(#a78bfa,#7c3aed)}
+  .tier .badge{flex:0 0 auto;width:62px;height:62px;border-radius:13px;display:grid;place-items:center;text-align:center;
+    font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:.78rem;line-height:1.1;color:#fff}
+  .tier.t1 .badge{background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);color:#6ee7b7}
+  .tier.t2 .badge{background:rgba(45,212,191,.14);border:1px solid rgba(45,212,191,.4);color:#5eead4}
+  .tier.t3 .badge{background:rgba(167,139,250,.14);border:1px solid rgba(167,139,250,.4);color:#c4b5fd}
+  .tier h3{margin:0 0 3px;font-size:1rem}
+  .tier .rng{font-size:.78rem;font-weight:600;color:var(--muted-2);font-family:"Space Grotesk",monospace;margin-bottom:6px}
+  .tier p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5}
+  .spot .note{margin-top:22px;font-size:.9rem;color:var(--ink-2);display:flex;gap:11px;align-items:flex-start}
+  .spot .note span{color:var(--em);font-size:1.1rem}
+
+  /* pipeline (semantic search) */
+  .pipe{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+  .pnode{flex:1 1 180px;padding:22px 20px;background:var(--glass);border:1px solid var(--line);border-radius:var(--r-sm);
+    position:relative;transition:transform .18s,border-color .18s}
+  .pnode:hover{transform:translateY(-4px);border-color:rgba(52,211,153,.4)}
+  .pnode .k{font-family:"Space Grotesk",monospace;font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--em);margin-bottom:9px}
+  .pnode h3{font-size:.96rem;margin:0 0 4px}
+  .pnode small{color:var(--muted);font-size:.82rem;line-height:1.45;display:block}
+  .parr{flex:0 0 auto;display:grid;place-items:center;width:40px;color:var(--em-2);font-size:1.3rem;opacity:.7}
+  @media(max-width:760px){.parr{width:100%;height:30px;transform:rotate(90deg)}}
+  .vchip{display:inline-flex;gap:7px;align-items:center;margin-top:18px;font-size:.84rem;color:var(--ink-2);
+    background:var(--surface);border:1px solid var(--line);padding:9px 15px;border-radius:10px}
+  .vchip b{color:var(--em);font-family:"Space Grotesk",sans-serif}
+
+  /* stack chips grid */
+  .stack{display:grid;grid-template-columns:repeat(5,1fr);gap:13px}
+  @media(max-width:900px){.stack{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:560px){.stack{grid-template-columns:repeat(2,1fr)}}
+  .sc{padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);text-align:center;
+    transition:transform .16s,border-color .16s}
+  .sc:hover{transform:translateY(-3px);border-color:rgba(52,211,153,.35)}
+  .sc .bd{width:34px;height:34px;border-radius:9px;margin:0 auto 10px;display:grid;place-items:center;font-weight:700;
+    font-size:.74rem;color:#04140d;background:var(--grad);font-family:"Space Grotesk",sans-serif}
+  .sc h3{font-size:.86rem;margin:0 0 2px}
+  .sc small{color:var(--muted-2);font-size:.74rem}
+
+  /* two-up small cards */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.duo{grid-template-columns:1fr}}
+
+  /* ---- native schema diagrams ---- */
+  .panel{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:38px 28px;
+    box-shadow:var(--sh-md);backdrop-filter:blur(12px);overflow-x:auto}
+  .node{position:relative;border-radius:12px;padding:12px 18px;font-family:"Space Grotesk",sans-serif;font-weight:600;
+    font-size:.86rem;color:#fff;text-align:center;background:rgba(255,255,255,.05);border:1px solid var(--line-2);white-space:nowrap}
+  .node small{display:block;font-family:"Inter",sans-serif;font-weight:400;font-size:.74rem;color:var(--muted);margin-top:2px;white-space:normal}
+  .node.start{background:var(--grad);color:#04140d;border:none;border-radius:999px;box-shadow:0 10px 26px rgba(16,185,129,.32)}
+  .node.dec{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.42);color:#fcd34d;border-radius:999px}
+  .node.leaf{border-color:rgba(52,211,153,.4)}
+  .node.ok{border-color:rgba(52,211,153,.55);color:#6ee7b7;background:rgba(52,211,153,.07)}
+  .arw{width:2px;height:22px;margin:8px auto;background:linear-gradient(rgba(148,163,184,.25),rgba(52,211,153,.6));position:relative;flex:0 0 auto}
+  .arw::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+    border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(52,211,153,.75)}
+  /* user-journey */
+  .jflow{display:flex;flex-direction:column;align-items:center;min-width:540px}
+  .jcols{display:grid;grid-template-columns:1fr 1fr;gap:36px;width:100%;max-width:720px}
+  .jcol{display:flex;flex-direction:column;align-items:center}
+  .lane{font-family:"Space Grotesk",sans-serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted-2);margin-bottom:13px}
+  .fork{position:relative;width:100%;max-width:720px;height:24px}
+  .fork span{position:absolute;background:rgba(52,211,153,.55)}
+  .fork .v{left:50%;top:0;width:2px;height:12px;transform:translateX(-50%)}
+  .fork .h{left:25%;right:25%;top:12px;height:2px}
+  .fork .d{top:12px;width:2px;height:12px;transform:translateX(-50%)}
+  .fork .d::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+    border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(52,211,153,.75)}
+  /* architecture */
+  .arch{display:flex;align-items:stretch;gap:0;min-width:860px}
+  .arch .acol{display:flex;flex-direction:column;justify-content:center;gap:16px}
+  .zone{border:1.5px dashed rgba(52,211,153,.32);border-radius:14px;padding:18px;background:rgba(52,211,153,.045);
+    display:flex;flex-direction:column;gap:11px}
+  .ztitle{font-family:"Space Grotesk",sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+  .box{border-radius:10px;padding:11px 15px;font-weight:600;font-size:.82rem;color:#fff;text-align:center;
+    font-family:"Space Grotesk",sans-serif;white-space:nowrap}
+  .box.agent{background:rgba(255,255,255,.06);border:1px solid var(--line-2)}
+  .box.agent.router{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.5)}
+  .box.agent small{display:block;font-weight:400;font-size:.7rem;color:var(--muted);font-family:"Inter",sans-serif;white-space:normal;margin-top:2px}
+  .box.em{background:var(--grad);color:#04140d}
+  .box.store{background:rgba(45,212,191,.13);border:1px solid rgba(45,212,191,.42);color:#5eead4}
+  .box.store small{display:block;font-weight:400;font-size:.7rem;color:#9fe8dc;font-family:"Inter",sans-serif;white-space:normal}
+  .box.conn{background:var(--grad);color:#04140d;clip-path:polygon(10% 0,90% 0,100% 50%,90% 100%,10% 100%,0 50%);padding:13px 26px}
+  .alink{display:grid;place-items:center;padding:0 8px;color:var(--em-2);font-size:1.5rem;opacity:.8}
+  .archsvg{display:block;width:100%;min-width:840px;height:auto}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin-top:22px;font-size:.78rem;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .legend .sw{width:12px;height:12px;border-radius:4px}
+
+  /* cta */
+  .cta{padding:62px 44px;text-align:center;border-radius:24px;background:
+    linear-gradient(140deg,rgba(16,185,129,.16),rgba(13,148,136,.06)),var(--glass);
+    border:1px solid rgba(52,211,153,.28);box-shadow:var(--sh-glow)}
+  .cta h2{color:#fff}
+  .cta p{color:var(--ink-2);max-width:540px;margin:12px auto 30px;font-size:1.05rem}
+  .cta .btnrow{justify-content:center;margin:0}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:46px 0 60px;background:rgba(255,255,255,.012)}
+  footer .top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  footer .desc{color:var(--muted-2);font-size:.88rem;max-width:320px;margin-top:8px}
+  footer .col h4{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin:0 0 12px}
+  footer .col a{display:block;color:var(--ink-2);font-size:.9rem;margin-bottom:9px}
+  .pfbtn{display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:12px;font-weight:600;
+    font-family:"Space Grotesk",sans-serif;color:#04140d!important;background:var(--grad);
+    box-shadow:0 12px 30px rgba(16,185,129,.3);transition:transform .2s,box-shadow .2s}
+  .pfbtn:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(16,185,129,.5);color:#04140d!important}
+  footer .legal{margin-top:38px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted-2);font-size:.82rem;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand"><span class="logo">365</span> HR Copilot</div>
+    <nav class="navlinks">
+      <a href="#impact">Business impact</a>
+      <a href="#hitl">Approvals</a>
+      <a href="#search">Semantic search</a>
+      <a href="#stack">Environment</a>
+      <a href="#trust">Governance</a>
+      <a class="nav-cta" href="https://lisekarimi.com/projects/369a61e3-4bdf-807f-83f8-cb36c2f71abc" target="_blank" rel="noopener">Learn more ↗</a>
+    </nav>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="kicker">Agentic AI for Enterprise HR</span>
+      <span class="pill"><span class="dot"></span> Governed on Azure &amp; Microsoft 365</span>
+      <h1>Enterprise HR,<br/><span class="grad-text">governed by design.</span></h1>
+      <p class="sub">An enterprise-grade HR agent that answers policy questions strictly from your approved documents and runs leave requests under human-approval controls — fully governed and compliant within your Microsoft 365 environment, delivered in Teams.</p>
+      <div class="btnrow">
+        <a class="btn primary" href="#impact">View the impact</a>
+        <a class="btn ghost" href="#hitl">⌥ See the approval controls</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n">Compliant</div><div class="l">Data stays in your tenant</div></div>
+        <div class="stat"><div class="n">Governed</div><div class="l">Human-in-the-loop approvals</div></div>
+        <div class="stat"><div class="n">Grounded</div><div class="l">Approved sources only</div></div>
+      </div>
+    </div>
+
+    <!-- console -->
+    <div class="glass console reveal">
+      <div class="console-bar">
+        <span class="av">HR</span>
+        <div>
+          <div class="nm">365 HR Copilot</div>
+          <div class="st">Online · enterprise AI agent</div>
+        </div>
+        <span class="tag">MS TEAMS</span>
+      </div>
+      <div class="console-body">
+        <div class="msg bot">Hi Lise — ask an HR policy question or start a leave request.</div>
+        <div class="msg user">What's the parental leave policy?</div>
+        <div class="msg bot">Parental leave is up to 16 weeks, fully paid for the primary caregiver…
+          <span class="chip src">🔎 Azure AI Search · vector match</span></div>
+        <div class="msg user">Leave from Aug 10 to Aug 25 — family vacation.</div>
+        <div class="msg bot">Leave request #2598 saved — routed to your manager for review.
+          <span class="chip esc">⤴ Pending N+1 approval</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- BUSINESS IMPACT -->
+<section class="section" id="impact" style="border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="center reveal" style="margin-bottom:36px">
+      <span class="eyebrow">Business impact</span>
+      <h2>What it delivers to the enterprise</h2>
+      <p class="lead">Typical outcomes for an agentic HR service — every conversation and approval is measured, so the value to the organization is visible and accountable.</p>
+    </div>
+    <div class="grid g4" style="margin-bottom:22px">
+      <div class="glass card kpi lift reveal"><div class="big">~85%</div><h3>Policy queries self-served</h3><p>Routine HR questions answered instantly from approved documents — no HR ticket raised.</p></div>
+      <div class="glass card kpi lift reveal"><div class="big">−50%</div><h3>HR administrative load</h3><p>Leave intake, validation, and routing automated, freeing HR for higher-value work.</p></div>
+      <div class="glass card kpi lift reveal"><div class="big">&lt;10s</div><h3>First response</h3><p>Employees are answered in seconds, any hour, instead of waiting in an HR queue.</p></div>
+      <div class="glass card kpi lift reveal"><div class="big">~40%</div><h3>Lower cost per request</h3><p>Self-service and automated approvals reduce the cost of every HR interaction.</p></div>
+    </div>
+    <div class="callout reveal">
+      <span class="ic">📊</span>
+      <p><b>Measured, not assumed.</b> Adoption, self-service rate, auto-approval rate, and turnaround are captured in <b style="color:#fff">Azure Application Insights</b> and surfaced in a live <b style="color:#fff">Power BI</b> dashboard — giving leadership a clear, auditable view of ROI and HR hours saved.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section class="section">
+  <div class="wrap">
+    <div class="center reveal" style="margin-bottom:48px">
+      <span class="eyebrow">What it does</span>
+      <h2>Two capabilities. One conversation.</h2>
+      <p class="lead">The agent interprets intent and handles the request end to end — no menus, no forms, no portal.</p>
+    </div>
+    <div class="duo">
+      <div class="glass card lift reveal">
+        <div class="ico">🔎</div>
+        <h3>Grounded HR answers</h3>
+        <p>Policy questions answered strictly from approved documents via semantic RAG, with the source cited — never the open web.</p>
+        <div class="tags"><span class="t">Azure AI Search</span><span class="t">semantic / vector</span></div>
+      </div>
+      <div class="glass card lift reveal">
+        <div class="ico">🏖️</div>
+        <h3>Leave automation + approvals</h3>
+        <p>Guided intake, date validation, and working-days computation — then AI&nbsp;+&nbsp;human (HITL) approval, written straight to Azure SQL.</p>
+        <div class="tags"><span class="t">Power Automate</span><span class="t">HITL</span><span class="t">Azure SQL</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USER JOURNEY -->
+<section class="section" id="journey" style="border-top:1px solid var(--line);padding-top:88px">
+  <div class="wrap">
+    <div class="center reveal" style="margin-bottom:42px">
+      <span class="eyebrow">User journey</span>
+      <h2>From question to approved leave</h2>
+      <p class="lead">One signed-in conversation routes to a grounded answer or a fully tracked leave request.</p>
+    </div>
+    <div class="panel reveal">
+      <div class="jflow">
+        <div class="node start">You sign in <small style="color:rgba(4,20,13,.7)">Entra ID · single sign-on</small></div>
+        <div class="arw"></div>
+        <div class="node dec">What do you need?</div>
+        <div class="fork"><span class="v"></span><span class="h"></span><span class="d" style="left:25%"></span><span class="d" style="left:75%"></span></div>
+        <div class="jcols">
+          <div class="jcol">
+            <div class="lane">Ask</div>
+            <div class="node leaf">HR policy question</div>
+            <div class="arw"></div>
+            <div class="node ok">Grounded answer ✓<small>cited from policy KB</small></div>
+          </div>
+          <div class="jcol">
+            <div class="lane">Act</div>
+            <div class="node leaf">Request leave</div>
+            <div class="arw"></div>
+            <div class="node">Validate &amp; compute<small>dates · working days</small></div>
+            <div class="arw"></div>
+            <div class="node">Check leave balance<small>remaining ≥ requested</small></div>
+            <div class="arw"></div>
+            <div class="node">Saved to Azure SQL<small>returns request ID</small></div>
+            <div class="arw"></div>
+            <div class="node ok"><a href="#hitl" style="color:inherit">Routed for approval ✓</a><small>AI · N+1 · N+2</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HITL SPOTLIGHT -->
+<section class="section" id="hitl" style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.012)">
+  <div class="wrap">
+    <div class="spot">
+      <div class="reveal">
+        <span class="eyebrow">Human in the loop</span>
+        <h2>The agent decides the easy cases. <span class="grad-text">People decide the rest.</span></h2>
+        <p class="lead" style="margin-bottom:6px">Every leave request is scored on duration and the clarity of its reason, then routed to exactly the right level of approval — so nothing risky is ever rubber-stamped.</p>
+        <div class="note"><span>🧭</span><p>Approvers are never hard-coded — the agent resolves the employee's manager (and their manager) from the <b style="color:#fff">Entra&nbsp;ID</b> directory at request time, always following the live org chart.</p></div>
+      </div>
+      <div class="reveal">
+        <div class="router">⚙ AI scores duration + reason clarity</div>
+        <div class="tiers">
+          <div class="tier t1">
+            <div class="badge">AI<br/>auto</div>
+            <div><h3>Auto-approve</h3><div class="rng">&lt; 3 working days</div>
+              <p>Short request with a clear, justified reason — approved instantly, employee notified, status written to Azure SQL.</p></div>
+          </div>
+          <div class="tier t2">
+            <div class="badge">N+1</div>
+            <div><h3>Manager review</h3><div class="rng">3–15 days · or ambiguous</div>
+              <p>Triggered by mid-length requests, an unclear reason, or a reason that doesn't match the duration.</p></div>
+          </div>
+          <div class="tier t3">
+            <div class="badge">N+2</div>
+            <div><h3>Senior approval</h3><div class="rng">&gt; 15 working days</div>
+              <p>Long absences escalate one level up — reviewed by the manager's manager with full request context.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEMANTIC SEARCH SPOTLIGHT -->
+<section class="section" id="search">
+  <div class="wrap">
+    <div class="center reveal" style="margin-bottom:46px">
+      <span class="eyebrow">Semantic / vector retrieval</span>
+      <h2>Answers from meaning, <span class="grad-text">not keywords.</span></h2>
+      <p class="lead">HR documents are embedded into vectors and retrieved by semantic similarity — so the agent finds the right policy even when the question is worded nothing like the document.</p>
+    </div>
+    <div class="reveal">
+      <div class="pipe">
+        <div class="pnode"><div class="k">01 · SOURCE</div><h3>Azure Blob</h3><small>HR policy documents as the single source of truth.</small></div>
+        <div class="parr">→</div>
+        <div class="pnode"><div class="k">02 · EMBED</div><h3>Azure AI Foundry</h3><small>Embedding model turns chunked text into vectors.</small></div>
+        <div class="parr">→</div>
+        <div class="pnode"><div class="k">03 · INDEX</div><h3>Azure AI Search</h3><small>Vector + semantic index for similarity retrieval.</small></div>
+        <div class="parr">→</div>
+        <div class="pnode"><div class="k">04 · GROUND</div><h3>Grounded answer</h3><small>Agent replies only from retrieved passages, cited.</small></div>
+      </div>
+      <div style="text-align:center">
+        <span class="vchip">🛡️ <b>Zero hallucination</b> — model knowledge is disabled; the agent answers strictly from your indexed documents.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section class="section" id="stack" style="border-top:1px solid var(--line);background:rgba(255,255,255,.012)">
+  <div class="wrap">
+    <div class="center reveal" style="margin-bottom:42px">
+      <span class="eyebrow">Governance &amp; environment</span>
+      <h2>It lives where your people already work</h2>
+      <p class="lead">Same identity, same security, same trusted environment — data never leaves your Microsoft&nbsp;365 &amp; Azure tenant, so the solution stays governed, compliant, and auditable by default.</p>
+    </div>
+    <div class="stack reveal">
+      <div class="sc"><div class="bd">CS</div><h3>Copilot Studio</h3><small>Agent &amp; orchestration</small></div>
+      <div class="sc"><div class="bd">AS</div><h3>AI Search</h3><small>Vector index</small></div>
+      <div class="sc"><div class="bd">AF</div><h3>AI Foundry</h3><small>Embeddings</small></div>
+      <div class="sc"><div class="bd">BL</div><h3>Blob Storage</h3><small>HR documents</small></div>
+      <div class="sc"><div class="bd">PA</div><h3>Power Automate</h3><small>Leave flows</small></div>
+      <div class="sc"><div class="bd">SQL</div><h3>Azure SQL</h3><small>Leave + status</small></div>
+      <div class="sc"><div class="bd">ID</div><h3>Entra ID</h3><small>Auth · approvers</small></div>
+      <div class="sc"><div class="bd">TM</div><h3>Teams</h3><small>Delivery surface</small></div>
+      <div class="sc"><div class="bd">AI</div><h3>App Insights</h3><small>Telemetry</small></div>
+      <div class="sc"><div class="bd">BI</div><h3>Power BI</h3><small>ROI dashboard</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- GOVERNANCE & TRUST -->
+<section class="section" id="trust" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="center reveal" style="margin-bottom:42px">
+      <span class="eyebrow">Governance &amp; trust</span>
+      <h2>Enterprise-grade by design</h2>
+      <p class="lead">Built for regulated environments, with the controls security, HR, and compliance teams expect — all within your Azure &amp; Microsoft 365 tenant.</p>
+    </div>
+    <div class="grid g3">
+      <div class="glass card lift reveal">
+        <div class="ico">🔐</div>
+        <h3>Identity &amp; access</h3>
+        <p>Microsoft Entra ID sign-in with role-based access and a full audit trail — authorized employees only, each seeing strictly their own leave.</p>
+      </div>
+      <div class="glass card lift reveal">
+        <div class="ico">🛡️</div>
+        <h3>Grounded &amp; compliant</h3>
+        <p>The agent answers strictly from your approved HR documents — no open web, no guessing — so every response is reliable and traceable to a source.</p>
+      </div>
+      <div class="glass card lift reveal">
+        <div class="ico">📊</div>
+        <h3>ROI, measured and auditable</h3>
+        <p>Azure Application Insights captures adoption, self-service, and auto-approval rates; Power BI surfaces HR hours saved and cost avoided — a clear, auditable view of ROI for leadership.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:40px">
+  <div class="wrap">
+    <div class="cta reveal">
+      <h2>Bring governed AI to your HR function</h2>
+      <p>An enterprise HR agent, built end to end on your Azure &amp; Microsoft 365 environment — compliant, auditable, and measured for ROI from day one.</p>
+      <div class="btnrow">
+        <a class="btn primary" href="https://lisekarimi.com/projects/369a61e3-4bdf-807f-83f8-cb36c2f71abc" target="_blank" rel="noopener">📖 Read the full project</a>
+        <a class="btn ghost" href="https://lisekarimi.com" target="_blank" rel="noopener">✨ More projects</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="brand"><span class="logo">365</span> HR Copilot</div>
+        <p class="desc">Enterprise agentic AI for HR — governed and human-overseen on Azure &amp; Microsoft 365, delivered in Teams.</p>
+      </div>
+      <div class="col">
+        <h4>Project</h4>
+        <a href="https://lisekarimi.com/projects/369a61e3-4bdf-807f-83f8-cb36c2f71abc" target="_blank" rel="noopener">Full project write-up</a>
+        <a href="https://lisekarimi.com" target="_blank" rel="noopener">More projects</a>
+      </div>
+      <div class="col" style="align-self:center">
+        <a class="pfbtn" href="https://lisekarimi.com" target="_blank" rel="noopener">✨ More projects →</a>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© <span id="yr">2026</span> · Built on Azure &amp; Microsoft 365.</span>
+      <span>Enterprise Agentic AI · Governed · Human oversight</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.14});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(Math.min(i%3,2)*80)+'ms';io.observe(el)});
+  document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>

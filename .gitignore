@@ -1,0 +1,21 @@
+# HR Agent (Copilot Studio export)
+HR Agent/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs & temp
+*.log
+*.tmp
+
+# Build artifacts & exports
+*.zip
+.src
